@@ -170,12 +170,12 @@ public class TestRailClient {
     }
 
     public boolean authenticationWorks() throws IOException {
-        TestRailResponse response = httpGet("/index.php?/api/v2/get_projects");
+        TestRailResponse response = httpGet("index.php?/api/v2/get_projects");
         return (200 == response.getStatus());
     }
 
     public Project[] getProjects() throws IOException, ElementNotFoundException {
-        String body = httpGet("/index.php?/api/v2/get_projects").getBody();
+        String body = httpGet("index.php?/api/v2/get_projects").getBody();
         JSONArray json = new JSONArray(body);
         Project[] projects = new Project[json.length()];
         for (int i = 0; i < json.length(); i++) {
@@ -200,7 +200,7 @@ public class TestRailClient {
     }
 
     public Suite[] getSuites(int projectId) throws IOException, ElementNotFoundException {
-        String body = httpGet("/index.php?/api/v2/get_suites/" + projectId).getBody();
+        String body = httpGet("index.php?/api/v2/get_suites/" + projectId).getBody();
 
         JSONArray json;
         try {
