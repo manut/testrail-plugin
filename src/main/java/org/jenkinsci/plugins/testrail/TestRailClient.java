@@ -35,6 +35,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.apache.http.HttpException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.InterruptedException;
@@ -96,7 +100,11 @@ public class TestRailClient {
 
         try {
             Integer status = httpclient.executeMethod(get);
-            String body = new String(get.getResponseBody(), get.getResponseCharSet());
+
+            String body = new BufferedReader(new InputStreamReader(get.getResponseBodyAsStream(),
+                                                                   get.getResponseCharSet()))
+                                                                      .lines()
+                                                                      .collect(Collectors.joining("\n"));
             result = new TestRailResponse(status, body);
         } finally {
             get.releaseConnection();
@@ -145,7 +153,10 @@ public class TestRailClient {
             );
             post.setRequestEntity(requestEntity);
             Integer status = httpclient.executeMethod(post);
-            String body = new String(post.getResponseBody(), post.getResponseCharSet());
+            String body = new BufferedReader(new InputStreamReader(post.getResponseBodyAsStream(),
+                                                                   post.getResponseCharSet()))
+                                                                       .lines()
+                                                                       .collect(Collectors.joining("\n"));
             result = new TestRailResponse(status, body);
         } finally {
             post.releaseConnection();
