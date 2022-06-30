@@ -81,14 +81,14 @@ public class TestRailClient {
 
         do {
             response = httpGetInt(path);
-            if (response.getStatus() == 429) {
+            if ((response.getStatus() == 429) || (response.getStatus() == 504)) {
                 try {
                     Thread.sleep(60000);
                 } catch (InterruptedException e) {
                     log(e.toString());
                 }
             }
-       } while (response.getStatus() == 429);
+        } while ((response.getStatus() == 429) || (response.getStatus() == 504));
 
        return response;
     }
@@ -120,14 +120,14 @@ public class TestRailClient {
         try {
             do {
                 response = httpPostInt(path, payload);
-                if (response.getStatus() == 429) {
+                if ((response.getStatus() == 429) || (response.getStatus() == 504)) {
                     try {
                         Thread.sleep(60000);
                     } catch (InterruptedException e) {
                         log(e.toString());
                     }
                 }
-            } while (response.getStatus() == 429);  
+            } while ((response.getStatus() == 429) || (response.getStatus() == 504));
         } catch (HttpException e) {
             throw new TestRailException("Posting to " + path + " returned an error!", e);
         }
